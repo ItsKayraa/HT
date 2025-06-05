@@ -1,0 +1,29 @@
+function printl
+/ad
+wved text db parameter, 10
+wvedi len equ $ - text
+/ad
+/astr
+recur
+wv mov rax, 1
+wv mov rdi, 1
+wves mov rsi, text
+wvesi mov rdx, len
+wv syscall
+/astr
+endfunc
+
+function printf
+/ad
+wved text db parameter
+wvedi len equ $ - text
+/ad
+/astr
+recur
+wv mov rax, 1
+wv mov rdi, 1
+wves mov rsi, text
+wvesi mov rdx, len
+wv syscall
+/astr
+endfunc
