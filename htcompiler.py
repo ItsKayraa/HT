@@ -7,6 +7,7 @@ try:
     htInstallPath = open("/usr/share/htip.txt").read()
 except:
     htInstallPath = input("Path where HT is installed: ")
+    open("/usr/share/htip.txt", w).write(htInstallPath)
 dataStr = "section .data\n"
 textStr = "section .text\nglobal _start\n"
 startLabel = "\n_start:\n"
