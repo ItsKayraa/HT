@@ -3,7 +3,10 @@ import os
 import sys
 import karg
 
-htInstallPath = "/home/kayra/Projects/ht"
+try:
+    htInstallPath = open("/usr/share/htip.txt").read()
+except:
+    htInstallPath = input("Path where HT is installed: ")
 dataStr = "section .data\n"
 textStr = "section .text\nglobal _start\n"
 startLabel = "\n_start:\n"
