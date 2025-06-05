@@ -2,7 +2,8 @@ import sendLibToAC
 import os
 import sys
 
-htInstallPath = "/home/kayra/Projects/ht"
+htInstallPath = open("installpath.pth").read()
+
 dataStr = "section .data\n"
 textStr = "section .text\nglobal _start\n"
 startLabel = "\n_start:\n"
