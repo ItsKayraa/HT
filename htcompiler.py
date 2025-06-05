@@ -2,7 +2,7 @@ import sendLibToAC
 import os
 import sys
 
-htInstallPath = open("installpath.pth").read()
+htInstallPath = open("installpath.pth").read().replace("\\n", "")
 
 dataStr = "section .data\n"
 textStr = "section .text\nglobal _start\n"
