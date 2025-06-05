@@ -5,11 +5,11 @@ wvedi len equ $ - text
 /ad
 /astr
 recur
-wv mov eax, 1
-wv mov edi, 1
-wves mov esi, text
+wv mov eax, 4
+wv mov ebx, 1
+wves mov ecx, text
 wvesi mov edx, len
-wv syscall
+wv int 0x80
 /astr
 endfunc
 
@@ -20,10 +20,10 @@ wvedi len equ $ - text
 /ad
 /astr
 recur
-wv mov eax, 1
-wv mov edi, 1
-wves mov esi, text
+wv mov eax, 4
+wv mov ebx, 1
+wves mov ecx, text
 wvesi mov edx, len
-wv syscall
+wv int 0x80
 /astr
 endfunc
