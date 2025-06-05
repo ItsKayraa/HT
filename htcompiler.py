@@ -212,7 +212,7 @@ def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
 
                 case _:
                     if argv[0] in unc_funcs:
-                        onlyLine(f"{unc_funcs[argv[0]]['func']} {unc_funcs[argv[0]]['funcpms'].replace("%s", argv[1])}", b32)
+                        onlyLine(f"{unc_funcs[argv[0]]['func']} {unc_funcs[argv[0]]['funcpms'].replace('%s', argv[1])}", b32)
                     else:
                         print("ERROR: Unknown instruction in line: ", line)
                         yn = input("ignore? [y/n]").lower()
