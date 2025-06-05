@@ -1,13 +1,8 @@
 import sendLibToAC
 import os
 import sys
-import karg
 
-try:
-    htInstallPath = open("/usr/share/htip.txt").read()
-except:
-    htInstallPath = input("Path where HT is installed: ")
-    open("/usr/share/htip.txt", w).write(htInstallPath)
+htInstallPath = "/home/kayra/Projects/ht"
 dataStr = "section .data\n"
 textStr = "section .text\nglobal _start\n"
 startLabel = "\n_start:\n"
@@ -20,11 +15,6 @@ def writeAsm(file: str, output: str, keeptemp: bool, b32: bool):
     global dataStr, textStr, startLabel
     asm_path = f"{file}HTOutputASM.s"
     obj_path = f"{file}HTOutput.o"
-
-    if asm_path in os.listdir(os.pardir(file)):
-        asm_path += "INCLUDEDALREADY626262"
-    if obj_path in os.listdir(os.pardir(file)):
-        obj_path += "INCLUDEDALREADY626262"
 
     with open(asm_path, "w") as asm:
         asm.write(dataStr)
@@ -210,7 +200,7 @@ def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
                     for key, value in cvars.items():
                         call_line = call_line.replace(key, str(value))
 
-                    onlyLine(call_line)
+                    onlyLine(call_line, b32)
 
 
                 case "//":
@@ -221,7 +211,7 @@ def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
 
                 case _:
                     if argv[0] in unc_funcs:
-                        onlyLine(f"{unc_funcs[argv[0]]["func"]} {unc_funcs[argv[0]]["funcpms"].replace("%s", argv[1])}")
+                        onlyLine(f"{unc_funcs[argv[0]]["func"]} {unc_funcs[argv[0]]["funcpms"].replace("%s", argv[1])}", b32)
                     else:
                         print("ERROR: Unknown instruction in line: ", line)
                         yn = input("ignore? [y/n]").lower()
@@ -230,28 +220,20 @@ def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
                         return
 
 if __name__ == "__main__":
-
-    karg.main(sys.argv)
-    sargs = karg.args
-    ngargs = karg.nonGivenArgs
-
-    file: str = sargs[""]
-    output = file.removesuffix(".ht")
-    keeptemp = False
+    args = sys.argv
+    file = args[1]
     b32 = False
+    keeptemp = False
+    output = file.removesuffix(".ht")
 
-    if "o" in sargs:
-        output = sargs["o"]
-    elif "output" in sargs:
-        output = sargs["output"]
-    
-    if "k" in ngargs:
-        keeptemp = True
-    elif "keeptemp" in ngargs:
-        keeptemp = True
-    
-    if "b32" in ngargs:
+    if "-b32" in args:
         b32 = True
+    
+    if "--keeptemp" in args or "-kt" in args:
+        keeptemp = True
+    
+    if "-o1" in args:
+        output = args[2]
 
 
     startCompile(file, output, keeptemp, b32)
