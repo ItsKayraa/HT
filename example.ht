@@ -1,5 +1,2 @@
-localvar sayı 3+3
-
-uselv sayı %endv printl "%1"
-
+printl "Hello, World!"
 endcode

@@ -34,6 +34,14 @@ def writeAsm(file: str, output: str, keeptemp: bool, b32: bool):
         os.system(f"rm {asm_path}")
         os.system(f"rm {obj_path}")
 
+def addEnd(b32: bool): # DONE
+    global startLabel
+    if b32:
+        startLabel += "\nmov eax, 60\nxor edi, edi\int 0x80\n" # / end (full safe)
+        return
+    startLabel += "\nmov rax, 60\nxor rdi, rdi\nsyscall\n" # / end (full safe)
+    return
+
 def onlyLine(line: str, b32: bool):
     global dataStr, startLabel, unc_funcs, compvar, scuts
     argv = line.strip().split()
@@ -107,14 +115,6 @@ def onlyLine(line: str, b32: bool):
             else:
                 print("ERROR: Unknown instruction in line: ", line)
                 return
-
-def addEnd(b32: bool): # DONE
-    global startLabel
-    if b32:
-        startLabel += "\nmov eax, 60\nxor edi, edi\nsyscall\n" # / end (full safe)
-        return
-    startLabel += "\nmov rax, 60\nxor rdi, rdi\nsyscall\n" # / end (full safe)
-    return
 
 def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
     global dataStr, startLabel, unc_funcs, compvar, scuts
