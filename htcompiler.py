@@ -136,7 +136,9 @@ def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
 
             match argv[0]:
                 case "using":
-                    lib = htInstallPath + "/" + "lib/" + argv[1]
+                    if lib.startswith("/") or lib.startswith("~"):
+                        lib = argv[1]
+                    else: lib = htInstallPath + "/" + "lib/" + argv[1]
                     scut = lib
                     if len(argv) > 2:
                         scut = argv[2]
@@ -169,6 +171,15 @@ def startCompile(file: str, output: str, keeptemp: bool, b32: bool):
                         compvar[name] = float(value)
                     except:
                         compvar[name] = value
+                
+                case "addAsmStr":
+                    startLabel += line.strip()[10:]
+                
+                case "addAsmData":
+                    dataStr += line.strip()[11:]
+                
+                case "addAsmText":
+                    textStr += line.strip()[11:]
 
                 case "printl": # / shortcut for importing and using library by libc
                     if b32:
