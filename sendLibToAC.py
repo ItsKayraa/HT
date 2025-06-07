@@ -3,11 +3,12 @@ funcs = {
 }
 
 curNum = 0
+curNumA = 0
 usedLines = []
 
 
 def compLib(file: str):
-    global curNum
+    global curNum, curNumA
     with open(file) as lib:
         varis = {}
         func = False
@@ -73,6 +74,39 @@ def compLib(file: str):
                     funcs[curFunc]["strT"] += line.strip() + "\n"
                     curNum += 1
                 
+                case "wvema":
+                    changing = argv[1]
+                    typ = argv[2]
+                    cn = argv[3]
+                    if cn == "A":
+                        cn = curNumA
+                    else:
+                        cn = curNum
+                    line = " ".join(argv[4:]).replace(changing, changing + str(cn))
+                    funcs[curFunc][typ] += line.strip() + "\n"
+                
+                case "wvemai":
+                    changing = argv[1]
+                    typ = argv[2]
+                    cn = argv[3]
+                    if cn == "A":
+                        cn = curNumA
+                    else:
+                        cn = curNum
+                    line = " ".join(argv[4:]).replace(changing, changing + str(cn))
+                    funcs[curFunc][typ] += line.strip() + "\n"
+                    if argv[3] == "A":
+                        curNumA += 1
+                    else:
+                        curNum += 1
+                    
+                case "delaylib": # yeah, i wasnt able to cook something in delay.tc so im cooking here
+                    typ = argv[1]
+                    if typ == "dataT":
+                        funcs[curFunc][typ] += f"timespec: dq parameter,0\n"
+                    elif typ == "strT":
+                        funcs[curFunc][typ] += f"mov rax, 35\nmov rdi, timespec\nxor rsi, rsi\n"
+
                 case "/ad":
                     addingData = not addingData
                 case "/astr":
@@ -106,12 +140,36 @@ def compLib(file: str):
                                 funcs[curFunc]["strT"] += newstr.strip() + "\n"
                             
 
+import uuid
+
+def proc_nl(code: str):
+    if not "%nl" in code:
+        return code
+    lines = code.split("\n")
+    i = 0
+    for line in lines:
+        if line.startswith("text"):
+            parts = " ".join(line.split()[2:]).split("%nl")
+            for part in parts:
+                lines[i] = line.replace(part, part + '"' + ', 10, "')
+        i += 1
+    
+    outdata = "\n".join(lines)
+    print(outdata)
+    return outdata.replace("%nl", "")
+
 def funcCall(func: str, parameter: str):
     if func in funcs:
         dataPart = funcs[func]["dataT"]
         textPart = funcs[func]["strT"]
 
-        dataPart = dataPart.replace("parameter", parameter)
+        uniqueID = uuid.uuid4().hex[:32]
+
+        for label in ["text", "len", "timespec"]:
+            dataPart = dataPart.replace(f"{label}", f"{label}_{uniqueID}")
+            textPart = textPart.replace(f"{label}", f"{label}_{uniqueID}")
+
+        dataPart = proc_nl(dataPart.replace("parameter", parameter))
         textPart = textPart.replace("parameter", parameter)
 
         return (dataPart, textPart)

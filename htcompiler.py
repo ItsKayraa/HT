@@ -2,7 +2,7 @@ import sendLibToAC
 import os
 import sys
 
-htInstallPath = open("installpath.pth").read().replace("\\n", "")
+htInstallPath = "/home/kayra/Projects/ht" # CHANGE THIS!!!
 
 dataStr = "section .data\n"
 textStr = "section .text\nglobal _start\n"
@@ -24,20 +24,22 @@ def writeAsm(file: str, output: str, keeptemp: bool, b32: bool):
         asm.write(startLabel)
 
     typ = "elf64"
+    typ1 = ""
     if b32:
         typ = "elf32"
+        typ1 = " -m elf_i386"
     
     os.system(f"nasm -f {typ} {asm_path} -o {obj_path}")
+    os.system(f"ld {obj_path} -o {output}{typ1}")
 
     if keeptemp != True:
-        os.system(f"ld {obj_path} -o {output}")
         os.system(f"rm {asm_path}")
         os.system(f"rm {obj_path}")
 
 def addEnd(b32: bool): # DONE
     global startLabel
     if b32:
-        startLabel += "\nmov eax, 60\nxor edi, edi\int 0x80\n" # / end (full safe)
+        startLabel += "\nmov eax, 1\nxor edi, edi\nint 0x80\n" # / end (full safe)
         return
     startLabel += "\nmov rax, 60\nxor rdi, rdi\nsyscall\n" # / end (full safe)
     return
