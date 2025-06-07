@@ -1,0 +1,55 @@
+ -- Syntax --
+
+1) endcode
+
+It adds the calls required to end the program at start label.
+
+2) localvar [name] [value]
+
+It adds a local variable for compiler (which will be not saved at the assembly) and you could use this local variable using 'uselv'.
+
+3) unc [parameters] %endv [command...]
+
+unc means uncalled function as it only stores one command inside it. You could store parameters inside it too.
+
+4) libc [libraryScut]:[libraryFunc] [parameters]
+
+Calls a library function with the given parameters.
+
+5) using [librarypath] [scut (optional)]
+
+Imports the library.
+You may use a real path for librarypath or just a library .tc file which is in lib dictionary.
+You can give a shortcut if you want. IF you don't, the scut will equal to library path.
+
+examples:
+
+using io.tc
+using io32.tc
+using ~/HT/lib/io.tc
+using ~/HT/lib/io32.tc
+using io.tc io
+using io32.tc io32
+using ~/HT/lib/io.tc io
+using ~/HT/lib/io32.tc io32
+
+6) printl
+
+printl is a function made for especially beginners. It's just using "printl" function of "lib/io.tc" library. (It imports the library fully even if oyu use it only once!)
+
+7) addAsmStr, addAsmData, addAsmText
+
+Adds the given line to assembly at location. (addAsmStr = Add assembly at _start label. addAsmData = Add assembly at .data section. addAsmText = Add assembly at .text section.)
+
+-- Comments --
+
+WARNING! You cannot add a comment at the same line with a command.
+
+Multiline Comments:
+
+/* Hello,
+Guys! *\
+
+One line comments:
+
+// Hello, Guys!
