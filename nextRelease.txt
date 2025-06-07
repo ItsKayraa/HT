@@ -5,9 +5,13 @@ What's in next releases?
 delay.tc library [DONE]
 utils.tc library [HALF DONE]
 diskutils.tc library [HALF DONE]
-linkgcc.tc linrary
+linkgcc.tc library
 
 [1.1.1]
 Library syntax
 How to create your own library
 How to upload it to be official library
+
+[1.1.2]
+cmdrun.tc library
+webutils.tc library
